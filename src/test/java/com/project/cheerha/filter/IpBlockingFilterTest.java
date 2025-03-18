@@ -1,7 +1,7 @@
 package com.project.cheerha.filter;
 
 import com.project.cheerha.common.exception.handler.FilterExceptionHandler;
-import com.project.cheerha.common.filter.IpBlockingFilter;
+import com.project.cheerha.common.security.IpBlockingFilter;
 import com.project.cheerha.common.repository.KeyValueQueryRepository;
 import com.project.cheerha.common.util.IpUtil;
 import jakarta.servlet.FilterChain;

@@ -1,7 +1,7 @@
 package com.project.cheerha.filter;
 
 import com.project.cheerha.common.exception.handler.FilterExceptionHandler;
-import com.project.cheerha.common.filter.JwtAuthenticationFilter;
+import com.project.cheerha.common.security.JwtAuthenticationFilter;
 import com.project.cheerha.common.properties.JwtSecurityProperties;
 import com.project.cheerha.domain.auth.service.BlackListService;
 import com.project.cheerha.common.util.JwtUtil;

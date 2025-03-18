@@ -1,7 +1,5 @@
-package com.project.cheerha.common.config;
+package com.project.cheerha.common.security;
 
-import com.project.cheerha.common.filter.IpBlockingFilter;
-import com.project.cheerha.common.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
