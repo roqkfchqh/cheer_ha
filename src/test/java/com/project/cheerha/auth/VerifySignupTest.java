@@ -3,7 +3,6 @@ package com.project.cheerha.auth;
 import com.project.cheerha.common.exception.client.BadRequestException;
 import com.project.cheerha.common.exception.client.ClientErrorCode;
 import com.project.cheerha.domain.user.service.EmailTokenService;
-import com.project.cheerha.common.util.PasswordEncoder;
 import com.project.cheerha.domain.auth.dto.request.VerifySignupRequestDto;
 import com.project.cheerha.domain.auth.dto.response.VerifySignupResponseDto;
 import com.project.cheerha.domain.auth.service.AuthService;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Map;
 
@@ -80,9 +80,7 @@ public class VerifySignupTest {
                 .verifyEmailToken(anyString(), anyString(), anyString());
 
         //When & Then
-        BadRequestException exception = assertThrows(BadRequestException.class, () -> {
-            authService.verifySignup(dto);
-        });
+        BadRequestException exception = assertThrows(BadRequestException.class, () -> authService.verifySignup(dto));
         assertEquals("이메일 인증 토큰이 유효하지 않습니다.", exception.getMessage());
         verify(userRepository, never()).save(any(User.class));
     }

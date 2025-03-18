@@ -4,7 +4,6 @@ import com.project.cheerha.common.exception.client.BadRequestException;
 import com.project.cheerha.common.exception.client.ClientErrorCode;
 import com.project.cheerha.common.exception.data.DataErrorCode;
 import com.project.cheerha.common.exception.data.NotFoundException;
-import com.project.cheerha.common.util.PasswordEncoder;
 import com.project.cheerha.domain.auth.repository.BannedEmailRepository;
 import com.project.cheerha.domain.user.dto.request.ResetPasswordRequestDto;
 import com.project.cheerha.domain.user.dto.request.UpdatePasswordRequestDto;
@@ -12,6 +11,7 @@ import com.project.cheerha.domain.user.dto.response.UpdatePasswordResponseDto;
 import com.project.cheerha.domain.user.entity.User;
 import com.project.cheerha.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

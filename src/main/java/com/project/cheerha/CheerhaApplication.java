@@ -1,6 +1,5 @@
 package com.project.cheerha;
 
-import com.project.cheerha.common.properties.BcryptSecurityProperties;
 import com.project.cheerha.common.properties.JwtSecurityProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaAuditing
 @SpringBootApplication
 @EnableAsync
-@EnableConfigurationProperties({JwtSecurityProperties.class, BcryptSecurityProperties.class})
+@EnableConfigurationProperties({JwtSecurityProperties.class})
 public class CheerhaApplication {
 
 	public static void main(String[] args) {

@@ -4,7 +4,6 @@ import com.project.cheerha.common.exception.auth.AuthErrorCode;
 import com.project.cheerha.common.exception.auth.UnAuthorizedException;
 import com.project.cheerha.domain.auth.service.RefreshTokenService;
 import com.project.cheerha.common.util.JwtUtil;
-import com.project.cheerha.common.util.PasswordEncoder;
 import com.project.cheerha.domain.auth.dto.request.CreateLoginRequestDto;
 import com.project.cheerha.domain.auth.dto.response.CreateLoginResponseDto;
 import com.project.cheerha.domain.auth.service.AuthService;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

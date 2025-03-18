@@ -8,7 +8,6 @@ import com.project.cheerha.common.exception.client.ClientErrorCode;
 import com.project.cheerha.common.properties.JwtSecurityProperties;
 import com.project.cheerha.domain.user.service.EmailTokenService;
 import com.project.cheerha.common.util.JwtUtil;
-import com.project.cheerha.common.util.PasswordEncoder;
 import com.project.cheerha.domain.auth.dto.request.CreateLoginRequestDto;
 import com.project.cheerha.domain.auth.dto.request.CreateSignupRequestDto;
 import com.project.cheerha.domain.auth.dto.request.VerifySignupRequestDto;
@@ -18,6 +17,7 @@ import com.project.cheerha.domain.user.repository.UserRepository;
 import com.project.cheerha.domain.user.service.UserFindByService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 

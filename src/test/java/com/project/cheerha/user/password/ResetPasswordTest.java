@@ -4,7 +4,6 @@ import com.project.cheerha.common.exception.client.BadRequestException;
 import com.project.cheerha.common.exception.client.ClientErrorCode;
 import com.project.cheerha.common.exception.data.NotFoundException;
 import com.project.cheerha.domain.user.service.EmailTokenService;
-import com.project.cheerha.common.util.PasswordEncoder;
 import com.project.cheerha.domain.auth.repository.BannedEmailRepository;
 import com.project.cheerha.domain.user.dto.request.ResetPasswordRequestDto;
 import com.project.cheerha.domain.user.dto.response.UpdatePasswordResponseDto;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
