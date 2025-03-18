@@ -26,12 +26,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) //csrf 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//세션 사용 안함
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("").permitAll()  //로그인 없이 접근 가능
-                        .requestMatchers("").hasRole("ADMIN") //관리자 전용
-                        .anyRequest().authenticated() //그 외 요청은 인증 필요
+//                        .requestMatchers("/**").permitAll()  //로그인 없이 접근 가능
+//                        .requestMatchers("").hasRole("ADMIN") //관리자 전용
+                        .anyRequest().permitAll() //그 외 요청은 인증 필요
                 )
-                .addFilterBefore(ipBlockingFilter, JwtAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(ipBlockingFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable) //기본 로그인 폼 비활성화
                 .httpBasic(AbstractHttpConfigurer::disable); //http basic 인증 비활성화
 

@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            // SecurityContext에 인증 정보 저장
+            //SecurityContext 에 인증 정보 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             if (isRequiredAdmin(url) && (role == null || !role.equals(Role.ADMIN))) {
