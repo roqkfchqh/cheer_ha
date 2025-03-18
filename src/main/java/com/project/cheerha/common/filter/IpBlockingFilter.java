@@ -10,13 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class IpBlockingFilter implements Filter {
+public class IpBlockingFilter extends OncePerRequestFilter {
 
     private final FilterExceptionHandler filterExceptionHandler;
     private final KeyValueQueryRepository keyValueQueryRepository;
@@ -24,17 +25,15 @@ public class IpBlockingFilter implements Filter {
     private static final String BLOCK_PREFIX = "block:ip:";
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        String ip = IpUtil.getClientIp(httpRequest);
+        String ip = IpUtil.getClientIp(request);
         String redisBlockKey = BLOCK_PREFIX + ip;
 
         if (Boolean.TRUE.equals(keyValueQueryRepository.hasKey(redisBlockKey))) {
             log.warn("차단된 IP 로그인 시도: {}", ip);
-            filterExceptionHandler.sendErrorResponse(httpResponse, HttpStatus.FORBIDDEN, "30초간 차단된 IP입니다.");
+            filterExceptionHandler.sendErrorResponse(response, HttpStatus.FORBIDDEN, "30초간 차단된 IP입니다.");
             return;
         }
 

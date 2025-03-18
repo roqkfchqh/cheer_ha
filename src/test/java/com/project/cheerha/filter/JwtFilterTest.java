@@ -1,7 +1,7 @@
 package com.project.cheerha.filter;
 
-import com.project.cheerha.common.filter.JwtFilter;
 import com.project.cheerha.common.exception.handler.FilterExceptionHandler;
+import com.project.cheerha.common.filter.JwtAuthenticationFilter;
 import com.project.cheerha.common.properties.JwtSecurityProperties;
 import com.project.cheerha.domain.auth.service.BlackListService;
 import com.project.cheerha.common.util.JwtUtil;
@@ -50,7 +50,7 @@ public class JwtFilterTest {
     private JwtSecurityProperties jwtSecurityProperties;
 
     @InjectMocks
-    private JwtFilter jwtFilter;
+    private JwtAuthenticationFilter jwtFilter;
 
     @Test
     void testFilter_화이트리스트일때() throws ServletException, IOException {
@@ -89,15 +89,12 @@ public class JwtFilterTest {
 
         Claims claims = mock(Claims.class);
         when(jwtUtil.extractClaims("validToken")).thenReturn(claims);
-        when(claims.getSubject()).thenReturn("1");
+        when(claims.getSubject()).thenReturn("1:USER");
 
         JwtSecurityProperties securityProperties = mock(JwtSecurityProperties.class);
         JwtSecurityProperties.Token token = mock(JwtSecurityProperties.Token.class);
 
-        when(securityProperties.token()).thenReturn(token);
-        when(token.prefix()).thenReturn("Bearer ");
-
-        jwtFilter = new JwtFilter(securityProperties, blackListService, jwtUtil, filterExceptionHandler);
+        jwtFilter = new JwtAuthenticationFilter(securityProperties, blackListService, jwtUtil, filterExceptionHandler);
         JwtSecurityProperties.Secret mockSecret = mock(JwtSecurityProperties.Secret.class);
         when(securityProperties.secret()).thenReturn(mockSecret);
         when(mockSecret.whiteList()).thenReturn(List.of("/auth/signup", "/auth/login"));
@@ -205,6 +202,6 @@ public class JwtFilterTest {
                 "/actuator/health",
                 "/auth/refresh"
         ));
-        jwtFilter = new JwtFilter(jwtSecurityProperties, blackListService, jwtUtil, filterExceptionHandler);
+        jwtFilter = new JwtAuthenticationFilter(jwtSecurityProperties, blackListService, jwtUtil, filterExceptionHandler);
     }
 }
