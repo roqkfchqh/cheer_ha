@@ -1,10 +1,10 @@
-#spring:
-#  profiles:
-#    active: dev
-
 spring:
   profiles:
-    active: release
+    active: dev
+
+#spring:
+#  profiles:
+#    active: release
 
 #spring:
 #  profiles:
