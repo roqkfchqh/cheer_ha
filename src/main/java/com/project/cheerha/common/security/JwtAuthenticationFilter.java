@@ -1,7 +1,6 @@
 package com.project.cheerha.common.security;
 
 import com.project.cheerha.common.exception.handler.FilterExceptionHandler;
-import com.project.cheerha.common.properties.JwtSecurityProperties;
 import com.project.cheerha.domain.auth.service.BlackListService;
 import com.project.cheerha.common.util.JwtUtil;
 import com.project.cheerha.domain.user.entity.Role;
@@ -10,7 +9,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,21 +27,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtSecurityProperties securityProperties;
     private final BlackListService blackListService;
     private final JwtUtil jwtUtil;
     private final FilterExceptionHandler filterExceptionHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-
-        String url = request.getRequestURI();
-
-        if (isWhiteList(url)) {
-            chain.doFilter(request, response);
-            return;
-        }
+            throws IOException {
 
         String bearerJwt = request.getHeader("Authorization");
 
@@ -79,11 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //SecurityContext 에 인증 정보 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            if (isRequiredAdmin(url) && (role == null || !role.equals(Role.ADMIN))) {
-                filterExceptionHandler.sendErrorResponse(response, HttpStatus.FORBIDDEN, "관리자만 접근 가능합니다.");
-                return;
-            }
-
             chain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.", e);
@@ -101,13 +86,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("예상치 못한 예외 발생", e);
             filterExceptionHandler.sendErrorResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
         }
-    }
-
-    private boolean isWhiteList(String requestURI) {
-        return securityProperties.secret().whiteList().contains(requestURI);
-    }
-
-    private boolean isRequiredAdmin(String requestURI) {
-        return securityProperties.secret().adminList().contains(requestURI);
     }
 }
