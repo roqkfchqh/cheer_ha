@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.jobopening.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.jobopening.dto.request.ReadJobOpeningRequestDto;
 import com.project.cheerha.domain.jobopening.dto.response.ReadJobOpeningResponseDto;
 import com.project.cheerha.domain.jobopening.service.JobOpeningService;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +45,7 @@ public class JobOpeningController {
      * @param requestDto 필터링 및 검색어를 포함
      * @param page 조회할 페이지 번호
      * @param size 페이지당 조회할 채용 공고 수
-     * @param authUser 현재 로그인한 사용자 정보
+     * @param userDetails 현재 로그인한 사용자 정보
      * @return 필터링된 채용 공고 목록 (페이지)
      */
     @GetMapping("/search")
@@ -53,10 +53,10 @@ public class JobOpeningController {
             @Valid @ModelAttribute ReadJobOpeningRequestDto requestDto,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
         Pageable pageable = validatePageSize(page, size);
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         Page<ReadJobOpeningResponseDto> dtoPage = jobOpeningService.readJobOpenings(
                 requestDto, userId, pageable
         );

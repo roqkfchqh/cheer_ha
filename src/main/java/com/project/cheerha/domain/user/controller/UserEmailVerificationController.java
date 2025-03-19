@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.user.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.user.dto.request.VerifyNotificationTokenRequestDto;
 import com.project.cheerha.domain.user.dto.request.VerifyPasswordResetTokenRequestDto;
 import com.project.cheerha.domain.user.dto.request.SendPasswordResetEmailVerificationTokenRequestDto;
@@ -12,6 +10,8 @@ import com.project.cheerha.domain.user.dto.response.SendEmailVerificationRespons
 import com.project.cheerha.domain.user.service.UserEmailVerificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,19 +26,21 @@ public class UserEmailVerificationController {
 
     @PostMapping("/send-notification-verify")
     public ResponseEntity<ApiResponseDto<SendEmailVerificationResponseDto>> sendNotificationVerifyEmailVerificationToken(
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        SendEmailVerificationResponseDto responseDto = userEmailVerificationService.sendNotificationVerifyEmailVerificationToken(authUser.id());
+        Long userId = Long.valueOf(userDetails.getUsername());
+        SendEmailVerificationResponseDto responseDto = userEmailVerificationService.sendNotificationVerifyEmailVerificationToken(userId);
         return ApiResponseDto.success(responseDto);
     }
 
     @PostMapping("/notification-verify")
     public ResponseEntity<ApiResponseDto<ActivateNotificationResponseDto>> verifyNotificationToken(
             @RequestBody VerifyNotificationTokenRequestDto requestDto,
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        userEmailVerificationService.verifyNotificationEmailToken(authUser.id(), requestDto.token());
-        ActivateNotificationResponseDto responseDto = userEmailVerificationService.activateNotification(authUser.id());
+        Long userId = Long.valueOf(userDetails.getUsername());
+        userEmailVerificationService.verifyNotificationEmailToken(userId, requestDto.token());
+        ActivateNotificationResponseDto responseDto = userEmailVerificationService.activateNotification(userId);
         return ApiResponseDto.success(responseDto);
     }
 

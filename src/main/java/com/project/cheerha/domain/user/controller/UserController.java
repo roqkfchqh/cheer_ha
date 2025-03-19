@@ -1,12 +1,12 @@
 package com.project.cheerha.domain.user.controller;
 
-import com.project.cheerha.common.annotation.Auth;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.user.dto.response.*;
 import com.project.cheerha.domain.user.service.UserService;
 import com.project.cheerha.common.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/users")
@@ -18,9 +18,10 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<ApiResponseDto<ReadUserResponseDto>> readUser(
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        ReadUserResponseDto responseDto = userService.readUser(authUser);
+        Long userId = Long.valueOf(userDetails.getUsername());
+        ReadUserResponseDto responseDto = userService.readUser(userId);
         return ApiResponseDto.success(responseDto);
     }
 }

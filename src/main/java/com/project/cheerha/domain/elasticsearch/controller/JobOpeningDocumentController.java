@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.elasticsearch.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ElasticApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticAutoRequestDto;
 import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticRequestDto;
 import com.project.cheerha.domain.elasticsearch.dto.response.ReadJobOpeningElasticAutoResponseDto;
@@ -14,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/job-opening")
@@ -71,7 +71,7 @@ public class JobOpeningDocumentController {
      * 전체 채용 공고 데이터와 필터링 및 검색어를 통해 Elasticsearch에서 데이터를 조회하는 API입니다.
      *
      * @param requestDto 사용자가 입력한 필터링 조건을 포함한 DTO
-     * @param authUser 현재 로그인한 사용자의 정보
+     * @param userDetails 현재 로그인한 사용자의 정보
      * @param page 조회할 페이지 번호
      * @param size 페이지 당 조회할 데이터 수
      * @return 필터링된 채용 공고 목록을 페이지네이션 형태로 반환
@@ -79,12 +79,12 @@ public class JobOpeningDocumentController {
     @GetMapping("/search/elastic/filters")
     public ResponseEntity<ElasticApiResponseDto<Page<ReadJobOpeningElasticResponseDto>>> readJobOpeningElasticsearch(
         @Valid @ModelAttribute ReadJobOpeningElasticRequestDto requestDto,
-        @Auth AuthUser authUser,
+        @AuthenticationPrincipal User userDetails,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = validatePageSize(page, size);
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         Page<ReadJobOpeningElasticResponseDto> jobOpeningElasticResponseDtoPage = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
         int totalItems = (int) jobOpeningElasticResponseDtoPage.getTotalElements();
         String message = "채용공고 " + totalItems + "개가 조회되었습니다.";
@@ -95,7 +95,7 @@ public class JobOpeningDocumentController {
      * Elasticsearch의 자동 완성 검색 기능을 활용하여 데이터를 조회하는 API입니다.
      *
      * @param requestDto 사용자가 입력한 검색어를 포함한 DTO
-     * @param authUser 현재 로그인한 사용자의 정보
+     * @param userDetails 현재 로그인한 사용자의 정보
      * @param page 조회할 페이지 번호
      * @param size 페이지 당 조회할 데이터 수
      * @return 자동 완성으로 검색된 채용 공고 목록을 페이지네이션 형태로 반환
@@ -103,12 +103,12 @@ public class JobOpeningDocumentController {
     @GetMapping("/search/elastic/auto")
     public ResponseEntity<ElasticApiResponseDto<Page<ReadJobOpeningElasticAutoResponseDto>>> readJobOpeningElasticAuto(
         @ModelAttribute ReadJobOpeningElasticAutoRequestDto requestDto,
-        @Auth AuthUser authUser,
+        @AuthenticationPrincipal User userDetails,
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = validatePageSize(page, size);
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         Page<ReadJobOpeningElasticAutoResponseDto> jobOpeningElasticResponseDtoPage = jobOpeningDocumentService.readJobOpeningElasticAuto(requestDto, userId, pageable);
         int totalItems = (int) jobOpeningElasticResponseDtoPage.getTotalElements();
         String message = "채용공고 " + totalItems + "개가 조회되었습니다.";

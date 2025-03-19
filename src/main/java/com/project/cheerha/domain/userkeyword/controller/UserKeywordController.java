@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.userkeyword.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.userkeyword.dto.request.CreateUserKeywordRequestDto;
 import com.project.cheerha.domain.userkeyword.dto.response.CreateUserKeywordResponseDto;
 import com.project.cheerha.domain.userkeyword.dto.response.ReadUserKeywordResponseDto;
@@ -10,6 +8,8 @@ import com.project.cheerha.domain.userkeyword.service.UserKeywordService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +28,9 @@ public class UserKeywordController {
     @PostMapping
     public ResponseEntity<ApiResponseDto<CreateUserKeywordResponseDto>> createUserKeywordList(
             @RequestBody CreateUserKeywordRequestDto requestDto,
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         CreateUserKeywordResponseDto responseDto = userKeywordService.createUserKeyword(
                 userId,
                 requestDto
@@ -40,9 +40,9 @@ public class UserKeywordController {
 
     @GetMapping
     public ResponseEntity<ApiResponseDto<List<ReadUserKeywordResponseDto>>> readAllUserKeywords(
-        @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         List<ReadUserKeywordResponseDto> responseDto = userKeywordService.readAllUserKeywords(userId);
         return ApiResponseDto.success(responseDto);
     }
@@ -50,9 +50,9 @@ public class UserKeywordController {
     @DeleteMapping
     public ResponseEntity<ApiResponseDto<Void>> deleteUserKeyword(
         @RequestParam List<Long> userKeywordIdList,
-            @Auth AuthUser authUser
+        @AuthenticationPrincipal User userDetails
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         userKeywordService.deleteUserKeyword(userId, userKeywordIdList);
         return ApiResponseDto.noContent();
     }

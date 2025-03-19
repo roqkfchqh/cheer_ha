@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.bookmark.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.bookmark.dto.response.BookmarkCustomAgeResponseDto;
 import com.project.cheerha.domain.bookmark.dto.response.ReadBookmarkResponseDto;
 import com.project.cheerha.domain.bookmark.service.BookmarkService;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/bookmarks")
@@ -29,15 +29,15 @@ public class BookmarkController {
      * 서비스 계층에서 북마크를 생성한 후 성공 메시지를 반환합니다.
      *
      * @param jobOpeningId 채용 공고 ID
-     * @param authUser 인증된 사용자의 정보
+     * @param userDetails 인증된 사용자의 정보
      * @return 북마크 생성 완료 메시지와 함께 응답
      */
     @PostMapping
     public ResponseEntity<ApiResponseDto<String>> createBookmark(
             @RequestParam Long jobOpeningId,
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         bookmarkService.createBookmark(userId, jobOpeningId);
         return ApiResponseDto.created("즐겨찾기 추가 완료");
     }
@@ -49,18 +49,18 @@ public class BookmarkController {
      * 페이징 처리하여 조회합니다. 사용자가 요청한 페이지 번호와 크기를 `validatePageSize` 메서드를 통해 검증하고,
      * 그에 맞는 `Pageable` 객체를 생성하여 서비스 메서드에 전달합니다. 조회된 북마크 목록은 페이징된 형태로 반환됩니다.
      *
-     * @param authUser 인증된 사용자의 정보 (JWT 토큰 등을 통해 인증된 사용자)
+     * @param userDetails 인증된 사용자의 정보 (JWT 토큰 등을 통해 인증된 사용자)
      * @param page 페이지 번호 (기본값: 1, 1보다 작은 값은 1로 처리됨)
      * @param size 페이지 크기 (기본값: 10, 1보다 작은 값은 1로 처리됨)
      * @return 조회된 북마크 목록을 포함한 응답 (페이징된 형태)
      */
     @GetMapping
     public ResponseEntity<ApiResponseDto<Page<ReadBookmarkResponseDto>>> readAllBookmarks(
-            @Auth AuthUser authUser,
+            @AuthenticationPrincipal User userDetails,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         Pageable pageable = validatePageSize(page, size);
         Page<ReadBookmarkResponseDto> responsePage = bookmarkService.readAllBookmarks(userId, pageable);
         return ApiResponseDto.success(responsePage);
@@ -74,15 +74,15 @@ public class BookmarkController {
      * 삭제 후, 삭제 성공 응답을 반환합니다.
      *
      * @param jobOpeningId 삭제할 채용 공고 ID
-     * @param authUser 인증된 사용자의 정보
+     * @param userDetails 인증된 사용자의 정보
      * @return 북마크 삭제 성공 응답
      */
     @DeleteMapping
     public ResponseEntity<ApiResponseDto<Void>> deleteBookmark(
             @RequestParam Long jobOpeningId,
-            @Auth AuthUser authUser
+            @AuthenticationPrincipal User userDetails
     ) {
-        Long userId = authUser.id();
+        Long userId = Long.valueOf(userDetails.getUsername());
         bookmarkService.deleteBookmark(userId, jobOpeningId);
         return ApiResponseDto.noContent();
     }

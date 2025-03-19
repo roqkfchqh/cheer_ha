@@ -1,6 +1,5 @@
 package com.project.cheerha.domain.user.service;
 
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.user.dto.response.ReadUserResponseDto;
 import com.project.cheerha.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,8 @@ public class UserService {
 
     private final UserFindByService userFindByService;
 
-    public ReadUserResponseDto readUser(AuthUser authUser) {
-        User user = userFindByService.findById(authUser.id());
+    public ReadUserResponseDto readUser(Long userId) {
+        User user = userFindByService.findById(userId);
         return ReadUserResponseDto.toDto(user.getEmail(), user.getName(), user.getCareer(), user.getAge(), user.isNotificationEnabled());
     }
 }

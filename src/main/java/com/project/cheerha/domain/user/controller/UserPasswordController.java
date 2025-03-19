@@ -1,8 +1,6 @@
 package com.project.cheerha.domain.user.controller;
 
-import com.project.cheerha.common.annotation.Auth;
 import com.project.cheerha.common.dto.ApiResponseDto;
-import com.project.cheerha.common.dto.AuthUser;
 import com.project.cheerha.domain.user.dto.request.ResetPasswordRequestDto;
 import com.project.cheerha.domain.user.dto.request.UpdatePasswordRequestDto;
 import com.project.cheerha.domain.user.dto.response.UpdatePasswordResponseDto;
@@ -10,6 +8,8 @@ import com.project.cheerha.domain.user.service.UserPasswordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +24,11 @@ public class UserPasswordController {
 
     @PatchMapping
     public ResponseEntity<ApiResponseDto<UpdatePasswordResponseDto>> updatePassword(
-            @Auth AuthUser authUser,
+            @AuthenticationPrincipal User userDetails,
             @RequestBody UpdatePasswordRequestDto requestDto
     ) {
-        UpdatePasswordResponseDto responseDto = userPasswordService.updatePassword(authUser.id(), requestDto);
+        Long userId = Long.valueOf(userDetails.getUsername());
+        UpdatePasswordResponseDto responseDto = userPasswordService.updatePassword(userId, requestDto);
         return ApiResponseDto.success(responseDto);
     }
 
