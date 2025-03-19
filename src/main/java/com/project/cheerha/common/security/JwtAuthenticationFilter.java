@@ -1,6 +1,7 @@
 package com.project.cheerha.common.security;
 
 import com.project.cheerha.common.exception.handler.FilterExceptionHandler;
+import com.project.cheerha.common.properties.JwtSecurityProperties;
 import com.project.cheerha.domain.auth.service.BlackListService;
 import com.project.cheerha.common.util.JwtUtil;
 import com.project.cheerha.domain.user.entity.Role;
@@ -12,6 +13,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,9 +30,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtSecurityProperties jwtSecurityProperties;
     private final BlackListService blackListService;
     private final JwtUtil jwtUtil;
     private final FilterExceptionHandler filterExceptionHandler;
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        List<String> whiteList = jwtSecurityProperties.secret().whiteList();
+
+        return whiteList.contains(path);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
