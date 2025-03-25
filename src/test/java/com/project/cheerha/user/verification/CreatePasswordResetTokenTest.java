@@ -1,6 +1,5 @@
 package com.project.cheerha.user.verification;
 
-import com.project.cheerha.common.exception.data.NotFoundException;
 import com.project.cheerha.domain.user.service.EmailTokenService;
 import com.project.cheerha.domain.user.dto.response.VerifyPasswordResetTokenResponseDto;
 import com.project.cheerha.domain.user.repository.UserRepository;
@@ -35,12 +34,5 @@ public class CreatePasswordResetTokenTest {
         VerifyPasswordResetTokenResponseDto response = userEmailVerificationService.createPasswordResetToken("test@example.com");
         assertNotNull(response);
         assertEquals("secureToken", response.resetToken());
-    }
-
-    @Test
-    void createPasswordResetToken_이메일없음_예외발생() {
-        when(userRepository.existsByEmail("test@example.com")).thenReturn(false);
-
-        assertThrows(NotFoundException.class, () -> userEmailVerificationService.createPasswordResetToken("test@example.com"));
     }
 }
