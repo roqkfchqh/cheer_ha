@@ -18,7 +18,6 @@ public class KeywordService {
 
     private final KeywordRepository keywordRepository;
 
-    @Transactional(readOnly = true)
     public ReadKeywordResponseDto readKeywords(String searchTerm) {
         List<Keyword> keywordList;
 
@@ -45,6 +44,7 @@ public class KeywordService {
      * @param maxAge 최대 연령
      * @return 커스텀 연령대 키워드 상위 10개 리스트
      */
+    @Transactional(readOnly = true)
     public List<KeywordCustomAgeResponseDto> readTop10KeywordsByAgeBetween(int minAge, int maxAge)
     {
         // 최소나이가 최대나이보다 클 때 예외처리하는 로직 추가
