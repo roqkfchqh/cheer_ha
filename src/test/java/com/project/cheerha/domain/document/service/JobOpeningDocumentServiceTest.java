@@ -1,7 +1,7 @@
 package com.project.cheerha.domain.document.service;
 
-import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticRequestDto;
-import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticResponseDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningDocumentRequestDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningDocumentResponseDto;
 import com.project.cheerha.domain.document.entity.JobOpeningDocument;
 import com.project.cheerha.domain.document.filter.JobOpeningDocumentFilter;
 import com.project.cheerha.domain.document.repository.SearchDocumentRepository;
@@ -50,7 +50,7 @@ public class JobOpeningDocumentServiceTest {
 
         // When: 서비스 메소드 실행
         // 실제 메소드를 호출.
-        Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readAllJobOpeningsUsingElasticsearch(pageable);
+        Page<ReadJobOpeningDocumentResponseDto> result = jobOpeningDocumentService.readAllJobOpeningsUsingElasticsearch(pageable);
 
         // Then: 결과 검증
         // 반환된 페이지가 비어있지 않고, 예상한 크기와 일치하는지 확인.
@@ -76,7 +76,7 @@ public class JobOpeningDocumentServiceTest {
         when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
-        Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readTop100PopularJobOpeningsUsingElasticsearch(pageable);
+        Page<ReadJobOpeningDocumentResponseDto> result = jobOpeningDocumentService.readTop100PopularJobOpeningsUsingElasticsearch(pageable);
 
         // Then: 결과 검증
         assertNotNull(result);
@@ -90,7 +90,7 @@ public class JobOpeningDocumentServiceTest {
         Pageable pageable = mock(Pageable.class);
         Long userId = 1L;
         String searchTerm = "developer";
-        ReadJobOpeningElasticRequestDto requestDto = mock(ReadJobOpeningElasticRequestDto.class);
+        ReadJobOpeningDocumentRequestDto requestDto = mock(ReadJobOpeningDocumentRequestDto.class);
         when(requestDto.getSearchTerm()).thenReturn(searchTerm);
         when(pageable.getPageSize()).thenReturn(10);
         when(pageable.getPageNumber()).thenReturn(1);
@@ -104,7 +104,7 @@ public class JobOpeningDocumentServiceTest {
         when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
-        Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
+        Page<ReadJobOpeningDocumentResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
 
         // Then: 결과 검증
         assertNotNull(result);
@@ -118,7 +118,7 @@ public class JobOpeningDocumentServiceTest {
         // Given: 테스트 데이터 준비
         Pageable pageable = mock(Pageable.class);
         Long userId = 1L;
-        ReadJobOpeningElasticRequestDto requestDto = mock(ReadJobOpeningElasticRequestDto.class);
+        ReadJobOpeningDocumentRequestDto requestDto = mock(ReadJobOpeningDocumentRequestDto.class);
         when(requestDto.getSearchTerm()).thenReturn(null);  // 검색어가 없는 경우
         when(pageable.getPageSize()).thenReturn(10);
         when(pageable.getPageNumber()).thenReturn(1);
@@ -129,7 +129,7 @@ public class JobOpeningDocumentServiceTest {
         when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
-        Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
+        Page<ReadJobOpeningDocumentResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
 
         // Then: 결과 검증
         assertNotNull(result);

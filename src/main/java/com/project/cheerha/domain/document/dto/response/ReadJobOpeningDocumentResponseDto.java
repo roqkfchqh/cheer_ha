@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * ReadJobOpeningElasticResponseDto 레코드는 Elasticsearch에서 조회한
+ * ReadJobOpeningDocumentResponseDto 레코드는 Elasticsearch에서 조회한
  * 채용공고(Job Opening) 정보를 담는 DTO(Data Transfer Object)입니다.
  * 이 DTO는 클라이언트에 채용공고의 세부 정보를 전달하는 데 사용됩니다.
  */
-public record ReadJobOpeningElasticResponseDto(
+public record ReadJobOpeningDocumentResponseDto(
         String id,  // 엘라스틱서치 id
         String title, // 채용공고 제목
         String company, // 회사 이름
@@ -30,17 +30,17 @@ public record ReadJobOpeningElasticResponseDto(
         List<String> requiredSkillList // 요구되는 기술 목록
 ) {
     /**
-     * 주어진 `JobOpeningDocument` 목록을 `ReadJobOpeningElasticResponseDto` 목록으로 변환하는 팩토리 메서드입니다.
+     * 주어진 `JobOpeningDocument` 목록을 `ReadJobOpeningDocumentResponseDto` 목록으로 변환하는 팩토리 메서드입니다.
      *
-     * 이 메서드는 `JobOpeningDocument` 엔티티의 각 필드를 `ReadJobOpeningElasticResponseDto`로 매핑하여,
+     * 이 메서드는 `JobOpeningDocument` 엔티티의 각 필드를 `ReadJobOpeningDocumentResponseDto`로 매핑하여,
      * 클라이언트에 전달할 수 있는 DTO 객체 리스트를 생성합니다.
      *
      * @param jobOpeningDocumentList 변환할 `JobOpeningDocument` 객체의 리스트
-     * @return 변환된 `ReadJobOpeningElasticResponseDto` 객체의 리스트
+     * @return 변환된 `ReadJobOpeningDocumentResponseDto` 객체의 리스트
      */
-    public static List<ReadJobOpeningElasticResponseDto> toDto(List<JobOpeningDocument> jobOpeningDocumentList) {
+    public static List<ReadJobOpeningDocumentResponseDto> toDto(List<JobOpeningDocument> jobOpeningDocumentList) {
         return jobOpeningDocumentList.stream()
-                .map(job -> new ReadJobOpeningElasticResponseDto(
+                .map(job -> new ReadJobOpeningDocumentResponseDto(
                         job.getId(),
                         job.getTitle(),
                         job.getCompany(),

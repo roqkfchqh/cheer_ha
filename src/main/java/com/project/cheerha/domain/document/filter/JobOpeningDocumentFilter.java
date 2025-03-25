@@ -4,13 +4,13 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import com.project.cheerha.common.elasticsearch.IndexName;
-import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticRequestDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningDocumentRequestDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JobOpeningDocumentFilter {
 
-    private final ReadJobOpeningElasticRequestDto requestDto;
+    private final ReadJobOpeningDocumentRequestDto requestDto;
 
     public BoolQuery.Builder build() {
         BoolQuery.Builder boolQueryBuilder = new BoolQuery.Builder();

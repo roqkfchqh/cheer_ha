@@ -11,7 +11,7 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReadJobOpeningElasticRequestDto {
+public class ReadJobOpeningDocumentRequestDto {
 
     private String educationLevel;
 

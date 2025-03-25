@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReadJobOpeningElasticAutoRequestDto {
+public class ReadJobOpeningDocumentAutoRequestDto {
 
     @Pattern(regexp = "^(|.*\\S.*)$", message = "검색어는 공백만 포함할 수 없습니다.")
     private String searchTerm;

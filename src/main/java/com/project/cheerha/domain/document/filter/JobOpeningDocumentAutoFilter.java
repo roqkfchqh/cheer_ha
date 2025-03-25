@@ -3,13 +3,13 @@ package com.project.cheerha.domain.document.filter;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import com.project.cheerha.common.elasticsearch.IndexName;
-import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticAutoRequestDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningDocumentAutoRequestDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JobOpeningDocumentAutoFilter {
 
-    private final ReadJobOpeningElasticAutoRequestDto requestDto;
+    private final ReadJobOpeningDocumentAutoRequestDto requestDto;
 
     public BoolQuery.Builder build() {
         BoolQuery.Builder boolQueryBuilder = new BoolQuery.Builder();

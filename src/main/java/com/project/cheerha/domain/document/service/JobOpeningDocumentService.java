@@ -5,10 +5,10 @@ import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.RangeQuery;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import com.project.cheerha.common.elasticsearch.IndexName;
-import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticAutoRequestDto;
-import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticRequestDto;
-import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticAutoResponseDto;
-import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticResponseDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningDocumentAutoRequestDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningDocumentRequestDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningDocumentAutoResponseDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningDocumentResponseDto;
 import com.project.cheerha.domain.document.entity.JobOpeningDocument;
 import com.project.cheerha.domain.document.filter.JobOpeningDocumentAutoFilter;
 import com.project.cheerha.domain.document.filter.JobOpeningDocumentFilter;
@@ -34,14 +34,14 @@ public class JobOpeningDocumentService {
      * 전체 채용공고 조회
      */
     @Transactional(readOnly = true)
-    public Page<ReadJobOpeningElasticResponseDto> readAllJobOpeningsUsingElasticsearch(Pageable pageable) {
+    public Page<ReadJobOpeningDocumentResponseDto> readAllJobOpeningsUsingElasticsearch(Pageable pageable) {
         int pageSize = pageable.getPageSize();
         int pageNumber = pageable.getPageNumber();
         int from = calculateFrom(pageNumber, pageSize, IndexName.MAX_JOB_OPENING_SIZE);
         SearchRequest searchRequest = buildSearchRequest(from, pageSize, null);
         List<JobOpeningDocument> jobOpeningDocumentList = searchDocumentRepository.fetchJobOpeningDocumentList(searchRequest);
         long totalJobOpenings = searchDocumentRepository.getTotalCount(searchRequest);
-        List<ReadJobOpeningElasticResponseDto> dtoList = ReadJobOpeningElasticResponseDto.toDto(jobOpeningDocumentList);
+        List<ReadJobOpeningDocumentResponseDto> dtoList = ReadJobOpeningDocumentResponseDto.toDto(jobOpeningDocumentList);
         return new PageImpl<>(dtoList, pageable, totalJobOpenings);
     }
 
@@ -49,13 +49,13 @@ public class JobOpeningDocumentService {
      * 조회수 기준 인기 채용공고 조회
      */
     @Transactional(readOnly = true)
-    public Page<ReadJobOpeningElasticResponseDto> readTop100PopularJobOpeningsUsingElasticsearch(Pageable pageable) {
+    public Page<ReadJobOpeningDocumentResponseDto> readTop100PopularJobOpeningsUsingElasticsearch(Pageable pageable) {
         int pageSize = Math.min(pageable.getPageSize(), IndexName.MAX_POPULAR_SIZE);
         int pageNumber = pageable.getPageNumber();
         int from = calculateFrom(pageNumber, pageSize, IndexName.MAX_POPULAR_SIZE);
         SearchRequest searchRequest = buildSearchRequest(from, pageSize, IndexName.VIEW_COUNT);
         List<JobOpeningDocument> jobOpeningDocuments = searchDocumentRepository.fetchJobOpeningDocumentList(searchRequest);
-        List<ReadJobOpeningElasticResponseDto> dtoList = ReadJobOpeningElasticResponseDto.toDto(jobOpeningDocuments);
+        List<ReadJobOpeningDocumentResponseDto> dtoList = ReadJobOpeningDocumentResponseDto.toDto(jobOpeningDocuments);
         return new PageImpl<>(dtoList, pageable, IndexName.MAX_POPULAR_SIZE);
     }
 
@@ -63,8 +63,8 @@ public class JobOpeningDocumentService {
      * 필터링된 채용공고 조회
      */
     @Transactional
-    public Page<ReadJobOpeningElasticResponseDto> readJobOpeningUsingElasticSearchFilter(
-            ReadJobOpeningElasticRequestDto requestDto,
+    public Page<ReadJobOpeningDocumentResponseDto> readJobOpeningUsingElasticSearchFilter(
+            ReadJobOpeningDocumentRequestDto requestDto,
             Long userId,
             Pageable pageable
     ) {
@@ -76,7 +76,7 @@ public class JobOpeningDocumentService {
         SearchRequest searchRequest = getSearchRequest(pageable, boolQueryBuilder);
         List<JobOpeningDocument> jobOpeningDocumentList = searchDocumentRepository.fetchJobOpeningDocumentList(searchRequest);
         long totalCount = searchDocumentRepository.getTotalCount(searchRequest);
-        List<ReadJobOpeningElasticResponseDto> dtoList = ReadJobOpeningElasticResponseDto.toDto(jobOpeningDocumentList);
+        List<ReadJobOpeningDocumentResponseDto> dtoList = ReadJobOpeningDocumentResponseDto.toDto(jobOpeningDocumentList);
         return new PageImpl<>(dtoList, pageable, totalCount);
     }
 
@@ -84,8 +84,8 @@ public class JobOpeningDocumentService {
      * 자동 완성 기능을 통한 채용 공고 조회
      */
     @Transactional
-    public Page<ReadJobOpeningElasticAutoResponseDto> readJobOpeningElasticAuto(
-            ReadJobOpeningElasticAutoRequestDto requestDto,
+    public Page<ReadJobOpeningDocumentAutoResponseDto> readJobOpeningElasticAuto(
+            ReadJobOpeningDocumentAutoRequestDto requestDto,
             Long userId,
             Pageable pageable
     ) {
@@ -98,7 +98,7 @@ public class JobOpeningDocumentService {
         SearchRequest searchRequest = getSearchRequest(pageable, boolQueryBuilder);
         List<JobOpeningDocument> jobOpeningDocumentList = searchDocumentRepository.fetchJobOpeningDocumentList(searchRequest);
         long totalCount = searchDocumentRepository.getTotalCount(searchRequest);
-        List<ReadJobOpeningElasticAutoResponseDto> dtoList = ReadJobOpeningElasticAutoResponseDto.toDto(jobOpeningDocumentList);
+        List<ReadJobOpeningDocumentAutoResponseDto> dtoList = ReadJobOpeningDocumentAutoResponseDto.toDto(jobOpeningDocumentList);
         return new PageImpl<>(dtoList, pageable, totalCount);
     }
 
