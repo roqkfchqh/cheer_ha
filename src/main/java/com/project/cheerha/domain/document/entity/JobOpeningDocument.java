@@ -1,4 +1,4 @@
-package com.project.cheerha.domain.elasticsearch.entity;
+package com.project.cheerha.domain.document.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.cheerha.common.elasticsearch.IndexName;

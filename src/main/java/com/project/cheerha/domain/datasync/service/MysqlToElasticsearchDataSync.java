@@ -1,7 +1,7 @@
 package com.project.cheerha.domain.datasync.service;
 
-import com.project.cheerha.domain.elasticsearch.entity.JobOpeningDocument;
-import com.project.cheerha.domain.elasticsearch.repository.JobOpeningDocumentRepository;
+import com.project.cheerha.domain.document.entity.JobOpeningDocument;
+import com.project.cheerha.domain.document.repository.JobOpeningDocumentRepository;
 import com.project.cheerha.domain.jobopening.entity.JobOpening;
 import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import com.project.cheerha.domain.jobopening.repository.JobOpeningRepository;

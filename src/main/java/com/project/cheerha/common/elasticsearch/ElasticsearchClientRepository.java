@@ -3,9 +3,10 @@ package com.project.cheerha.common.elasticsearch;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import com.project.cheerha.domain.elasticsearch.entity.JobOpeningDocument;
+import com.project.cheerha.domain.document.entity.JobOpeningDocument;
 import com.project.cheerha.common.exception.data.ElasticsearchQueryException;
 import com.project.cheerha.common.exception.data.DataErrorCode;
+import com.project.cheerha.domain.document.repository.SearchDocumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class ElasticsearchClientService {
+public class ElasticsearchClientRepository implements SearchDocumentRepository {
 
     private final ElasticsearchClient elasticsearchClient;
 
@@ -26,6 +27,7 @@ public class ElasticsearchClientService {
      * @return 검색된 데이터 목록
      * @throws ElasticsearchQueryException Elasticsearch 쿼리 실행 실패 시 발생
      */
+    @Override
     public List<JobOpeningDocument> fetchJobOpeningDocumentList(SearchRequest searchRequest) {
         try {
             // Elasticsearch 쿼리 실행
@@ -45,6 +47,7 @@ public class ElasticsearchClientService {
      * @return 검색된 총 문서 수
      * @throws ElasticsearchQueryException Elasticsearch 쿼리 실행 실패 시 발생
      */
+    @Override
     public long getTotalCount(SearchRequest searchRequest) {
         try {
             SearchResponse<JobOpeningDocument> searchResponse = elasticsearchClient.search(searchRequest, JobOpeningDocument.class);

@@ -1,11 +1,11 @@
-package com.project.cheerha.domain.elasticsearch.controller;
+package com.project.cheerha.domain.document.controller;
 
 import com.project.cheerha.common.dto.ElasticApiResponseDto;
-import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticAutoRequestDto;
-import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticRequestDto;
-import com.project.cheerha.domain.elasticsearch.dto.response.ReadJobOpeningElasticAutoResponseDto;
-import com.project.cheerha.domain.elasticsearch.dto.response.ReadJobOpeningElasticResponseDto;
-import com.project.cheerha.domain.elasticsearch.service.JobOpeningDocumentService;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticAutoRequestDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticRequestDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticAutoResponseDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticResponseDto;
+import com.project.cheerha.domain.document.service.JobOpeningDocumentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

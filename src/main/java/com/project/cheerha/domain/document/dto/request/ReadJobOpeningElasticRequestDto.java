@@ -1,4 +1,4 @@
-package com.project.cheerha.domain.elasticsearch.dto.request;
+package com.project.cheerha.domain.document.dto.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;

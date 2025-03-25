@@ -1,9 +1,9 @@
-package com.project.cheerha.domain.elasticsearch.filter;
+package com.project.cheerha.domain.document.filter;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Operator;
 import com.project.cheerha.common.elasticsearch.IndexName;
-import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticAutoRequestDto;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticAutoRequestDto;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

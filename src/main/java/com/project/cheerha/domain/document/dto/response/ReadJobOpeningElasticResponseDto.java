@@ -1,6 +1,6 @@
-package com.project.cheerha.domain.elasticsearch.dto.response;
+package com.project.cheerha.domain.document.dto.response;
 
-import com.project.cheerha.domain.elasticsearch.entity.JobOpeningDocument;
+import com.project.cheerha.domain.document.entity.JobOpeningDocument;
 
 import java.time.ZonedDateTime;
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.project.cheerha.domain.elasticsearch.service;
+package com.project.cheerha.domain.document.service;
 
-import com.project.cheerha.common.elasticsearch.ElasticsearchClientService;
-import com.project.cheerha.domain.elasticsearch.dto.request.ReadJobOpeningElasticRequestDto;
-import com.project.cheerha.domain.elasticsearch.dto.response.ReadJobOpeningElasticResponseDto;
-import com.project.cheerha.domain.elasticsearch.entity.JobOpeningDocument;
-import com.project.cheerha.domain.elasticsearch.filter.JobOpeningDocumentFilter;
+import com.project.cheerha.domain.document.dto.request.ReadJobOpeningElasticRequestDto;
+import com.project.cheerha.domain.document.dto.response.ReadJobOpeningElasticResponseDto;
+import com.project.cheerha.domain.document.entity.JobOpeningDocument;
+import com.project.cheerha.domain.document.filter.JobOpeningDocumentFilter;
+import com.project.cheerha.domain.document.repository.SearchDocumentRepository;
 import com.project.cheerha.domain.searchhistory.service.SearchHistoryService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JobOpeningDocumentServiceTest {
 
     @Mock
-    private ElasticsearchClientService elasticsearchClientService;
+    private SearchDocumentRepository searchDocumentRepository;
 
     @Mock
     private SearchHistoryService searchHistoryService;
@@ -46,7 +46,7 @@ public class JobOpeningDocumentServiceTest {
         // Elasticsearch 요청 객체와 더미 데이터를 준비.
         JobOpeningDocument mockJobOpeningDocument = mock(JobOpeningDocument.class);
         List<JobOpeningDocument> jobOpeningDocuments = Collections.singletonList(mockJobOpeningDocument);
-        when(elasticsearchClientService.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
+        when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
         // 실제 메소드를 호출.
@@ -58,7 +58,7 @@ public class JobOpeningDocumentServiceTest {
         assertEquals(jobOpeningDocuments.size(), result.getContent().size());
 
         // Elasticsearch의 fetchJobOpeningDocumentList 메소드가 정확히 한 번 호출되었는지 검증.
-        verify(elasticsearchClientService, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
+        verify(searchDocumentRepository, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class JobOpeningDocumentServiceTest {
         // 더미 데이터 준비
         JobOpeningDocument mockJobOpeningDocument = mock(JobOpeningDocument.class);
         List<JobOpeningDocument> jobOpeningDocuments = Collections.singletonList(mockJobOpeningDocument);
-        when(elasticsearchClientService.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
+        when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
         Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readTop100PopularJobOpeningsUsingElasticsearch(pageable);
@@ -81,7 +81,7 @@ public class JobOpeningDocumentServiceTest {
         // Then: 결과 검증
         assertNotNull(result);
         assertEquals(jobOpeningDocuments.size(), result.getContent().size());
-        verify(elasticsearchClientService, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
+        verify(searchDocumentRepository, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class JobOpeningDocumentServiceTest {
         // 더미 데이터 준비
         JobOpeningDocument mockJobOpeningDocument = mock(JobOpeningDocument.class);
         List<JobOpeningDocument> jobOpeningDocuments = Collections.singletonList(mockJobOpeningDocument);
-        when(elasticsearchClientService.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
+        when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
         Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
@@ -109,7 +109,7 @@ public class JobOpeningDocumentServiceTest {
         // Then: 결과 검증
         assertNotNull(result);
         assertEquals(jobOpeningDocuments.size(), result.getContent().size());
-        verify(elasticsearchClientService, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
+        verify(searchDocumentRepository, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
         verify(searchHistoryService, times(1)).saveSearchTerm(userId, searchTerm); // 검색어 저장이 호출되었는지 검증
     }
 
@@ -126,7 +126,7 @@ public class JobOpeningDocumentServiceTest {
         // 더미 데이터 준비
         JobOpeningDocument mockJobOpeningDocument = mock(JobOpeningDocument.class);
         List<JobOpeningDocument> jobOpeningDocuments = Collections.singletonList(mockJobOpeningDocument);
-        when(elasticsearchClientService.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
+        when(searchDocumentRepository.fetchJobOpeningDocumentList(ArgumentMatchers.any())).thenReturn(jobOpeningDocuments);
 
         // When: 서비스 메소드 실행
         Page<ReadJobOpeningElasticResponseDto> result = jobOpeningDocumentService.readJobOpeningUsingElasticSearchFilter(requestDto, userId, pageable);
@@ -134,7 +134,7 @@ public class JobOpeningDocumentServiceTest {
         // Then: 결과 검증
         assertNotNull(result);
         assertEquals(jobOpeningDocuments.size(), result.getContent().size());
-        verify(elasticsearchClientService, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
+        verify(searchDocumentRepository, times(1)).fetchJobOpeningDocumentList(ArgumentMatchers.any());
         verify(searchHistoryService, times(0)).saveSearchTerm(userId, null);  // 검색어가 없으면 검색어 저장하지 않음
     }
 }
