@@ -20,7 +20,7 @@ services:
       - prometheus
     restart: always
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=비번
+      - GF_SECURITY_ADMIN_PASSWORD=admin
 networks:
   monitoring:
     driver: bridge
