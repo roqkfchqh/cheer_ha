@@ -12,7 +12,6 @@ import com.project.cheerha.domain.user.entity.User;
 import com.project.cheerha.domain.user.service.UserFindByService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +29,8 @@ public class UserKeywordService {
         Long userId,
         CreateUserKeywordRequestDto requestDto
     ) {
-        List<Long> idList = requestDto.keywordIdList();
-
-        List<Keyword> keywordList = createNewUserKeywordIfNotExist(userId, idList);
-
+        List<Keyword> keywordList = createNewUserKeywordIfNotExist(userId, requestDto.keywordIdList());
         List<String> keywordNameList = Keyword.extractNameFromEntity(keywordList);
-
         return CreateUserKeywordResponseDto.toDto(keywordNameList);
     }
 
@@ -49,18 +44,15 @@ public class UserKeywordService {
 
                 if (!isKeywordAlreadyChosen(userId, keywordId)) {
                     User user = userFindByIdService.findById(userId);
-
                     UserKeyword newUserKeyword = UserKeyword.toEntity(
                         user,
                         keyword
                     );
-
                     userKeywordRepository.save(newUserKeyword);
                 }
                 keywordList.add(keyword);
             }
         );
-
         return keywordList;
     }
 
@@ -69,7 +61,6 @@ public class UserKeywordService {
         return userKeywordRepository.existsByUserIdAndKeywordId(userId, keywordId);
     }
 
-    @Transactional
     public void deleteUserKeyword(
         Long userId,
         List<Long> userKeywordIdList
@@ -88,11 +79,8 @@ public class UserKeywordService {
         );
     }
 
-    @Transactional(readOnly = true)
     public List<ReadUserKeywordResponseDto> readAllUserKeywords(Long userId) {
-
-        List<UserKeyword> userKeywords = userKeywordRepository.findByUserId(
-            userId); // userKeyword를 다 찾아옵니다.
+        List<UserKeyword> userKeywords = userKeywordRepository.findByUserId(userId);
 
         return userKeywords.stream()
             .map(userKeyword -> {

@@ -33,7 +33,7 @@ public class SearchHistoryService {
      * @param searchTerm 사용자가 입력한 검색어
      */
     public void saveSearchTerm(Long userId, String searchTerm) {
-        String key = "user:" + userId + ":search_history";
+        String key = getKey(userId);
         long timestamp = System.currentTimeMillis();
         if(!searchTerm.isBlank()) {
             keyValueCommandRepository.addToZSet(key, searchTerm, timestamp);
@@ -42,7 +42,6 @@ public class SearchHistoryService {
         if (size != null && size > MAX_SEARCH_HISTORY_SIZE) {
             keyValueCommandRepository.removeFromZSetRange(key, 0, size - MAX_SEARCH_HISTORY_SIZE - 1);
         }
-
         keyValueCommandRepository.expireValue(key, EXPIRATION_TIME, TimeUnit.SECONDS);
     }
 
@@ -57,7 +56,7 @@ public class SearchHistoryService {
      * @return 최근 검색한 검색어 목록 (10개)
      */
     public List<String> getRecentSearchTerms(Long userId) {
-        String key = "user:" + userId + ":search_history";
+        String key = getKey(userId);
 
         Set<String> searchTermSet = keyValueQueryRepository.getZSetReverseRange(key, 0, 9);
         if (searchTermSet == null || searchTermSet.isEmpty()) {
@@ -84,5 +83,9 @@ public class SearchHistoryService {
         Collections.reverse(searchTermListInDatabase);
 
         return searchTermListInDatabase;
+    }
+
+    private String getKey(Long userId) {
+        return "user:" + userId + ":search_history";
     }
 }

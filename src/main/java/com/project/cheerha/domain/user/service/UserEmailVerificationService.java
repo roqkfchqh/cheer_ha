@@ -73,6 +73,10 @@ public class UserEmailVerificationService {
         return SendEmailVerificationResponseDto.toDto();
     }
 
+    /**
+     * 비밀번호 리셋 인증 코드 검증용 메서드
+     * @param token 사용자의 이메일에 보낸 코드
+     */
     public void verifyPasswordResetEmailToken(String email, String token) {
         if(!userRepository.existsByEmail(email)){
             throw new NotFoundException(DataErrorCode.USER_NOT_FOUND);
@@ -86,9 +90,6 @@ public class UserEmailVerificationService {
      * @return 패스워드 리셋용 토큰(passwordService 에서 사용)
      */
     public VerifyPasswordResetTokenResponseDto createPasswordResetToken(String email) {
-        if(!userRepository.existsByEmail(email)){
-            throw new NotFoundException(DataErrorCode.USER_NOT_FOUND);
-        }
         String token = emailTokenService.saveSecureToken(email);
         return VerifyPasswordResetTokenResponseDto.toDto(email, token);
     }
