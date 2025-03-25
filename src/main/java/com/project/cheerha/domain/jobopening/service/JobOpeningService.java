@@ -1,16 +1,12 @@
 package com.project.cheerha.domain.jobopening.service;
 
-import com.project.cheerha.common.exception.data.DataErrorCode;
-import com.project.cheerha.common.exception.data.NotFoundException;
 import com.project.cheerha.common.elasticsearch.IndexName;
 import com.project.cheerha.domain.jobopening.dto.request.ReadJobOpeningRequestDto;
 import com.project.cheerha.domain.jobopening.dto.response.ReadJobOpeningResponseDto;
 import com.project.cheerha.domain.jobopening.entity.JobOpening;
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import com.project.cheerha.domain.jobopening.repository.JobOpeningRepository;
 import com.project.cheerha.domain.searchhistory.service.SearchHistoryService;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,8 +89,8 @@ public class JobOpeningService {
             JobOpening jobOpening = jobOpeningFindByService.findById(dto.getId());
             if (jobOpening != null) {
                 // JobOpening에서 requiredSkills를 가져오기
-                List<String> requiredSkillList = jobOpening.getRequiredSkillList();
-                dto.addRequiredSkills(requiredSkillList); // DTO에 requiredSkills 추가
+                RequiredSkills requiredSkills = new RequiredSkills(jobOpening.getJobOpeningKeywordList());
+                dto.addRequiredSkills(requiredSkills); // DTO에 requiredSkills 추가
             }
         }
 

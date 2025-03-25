@@ -3,7 +3,6 @@ package com.project.cheerha.domain.bookmark.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.cheerha.common.repository.KeyHashRepository;
 import com.project.cheerha.domain.bookmark.dto.response.ReadBookmarkResponseDto;
-import com.project.cheerha.domain.bookmark.entity.Bookmark;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -41,13 +40,14 @@ public class BookmarkCacheService {
         return new ArrayList<>();
     }
 
+    //TODO: 캐시에 entity 를 넣으면 LazyInitialize.. 발생하는 이유 찾기
     // 북마크 추가 후 캐시 갱신하는 메서드
-    public void updateCacheOnBookmarkAdd(Long userId, Bookmark bookmark) {
-        keyHashRepository.putValue("user:" + userId + ":bookmarks", bookmark.getJobOpening().getId(), bookmark);
+    public void updateCacheOnBookmarkAdd(Long userId, ReadBookmarkResponseDto dto) {
+        keyHashRepository.putValue("user:" + userId.toString() + ":bookmarks", dto.id().toString(), dto);
     }
 
     // 캐시에서 북마크 삭제하는 메서드
     public void deleteBookmarkFromCache(Long userId, Long jobOpeningId) {
-        keyHashRepository.deleteValue("user:" + userId + ":bookmarks", jobOpeningId);
+        keyHashRepository.deleteValue("user:" + userId.toString() + ":bookmarks", jobOpeningId.toString());
     }
 }

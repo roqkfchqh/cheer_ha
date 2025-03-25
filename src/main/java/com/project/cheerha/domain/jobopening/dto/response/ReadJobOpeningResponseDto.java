@@ -1,5 +1,6 @@
 package com.project.cheerha.domain.jobopening.dto.response;
 
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
@@ -54,7 +55,7 @@ public class ReadJobOpeningResponseDto {
         this.viewCount = viewCount;
     }
 
-    public void addRequiredSkills(List<String> requiredSkillList) {
-        this.requiredSkillList = requiredSkillList;
+    public void addRequiredSkills(RequiredSkills requiredSkills) {
+        this.requiredSkillList = requiredSkills.getValues();
     }
 }

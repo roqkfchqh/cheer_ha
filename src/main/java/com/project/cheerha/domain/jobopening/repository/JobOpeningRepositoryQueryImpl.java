@@ -5,6 +5,7 @@ import com.project.cheerha.domain.jobopening.dto.response.QReadJobOpeningRespons
 import com.project.cheerha.domain.jobopening.dto.response.ReadJobOpeningResponseDto;
 import com.project.cheerha.domain.jobopening.entity.EducationLevel;
 import com.project.cheerha.domain.jobopening.entity.EmploymentType;
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -104,7 +105,10 @@ public class JobOpeningRepositoryQueryImpl implements JobOpeningRepositoryQuery 
                 ));
 
         // 5. 각 Dto에 자격 요건 추가
-        dtoList.forEach(dto -> dto.addRequiredSkills(requiredSkillMap.getOrDefault(dto.getId(), new ArrayList<>())));
+        dtoList.forEach(dto -> {
+            List<String> skills = requiredSkillMap.getOrDefault(dto.getId(), new ArrayList<>());
+            dto.addRequiredSkills(new RequiredSkills(skills, true));
+        });
 
         // 6. 결과 반환
         return new PageImpl<>(dtoList, pageable, dtoList.size());
@@ -145,7 +149,7 @@ public class JobOpeningRepositoryQueryImpl implements JobOpeningRepositoryQuery 
                 .from(jobOpening)
                 .orderBy(jobOpening.viewCount.desc())
                 .limit(100)
-                .offset(pageable.getPageNumber() * pageable.getPageSize())
+                .offset((long) pageable.getPageNumber() * pageable.getPageSize())
                 .limit(pageable.getPageSize())
                 .fetch();
 

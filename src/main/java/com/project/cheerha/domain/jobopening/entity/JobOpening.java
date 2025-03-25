@@ -23,7 +23,6 @@ public class JobOpening  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // todo 가독성을 위해 255가 기본값이지만 입력 완료, 추후 데이터 수집 후 값 수정 예정
     @Column(length = 255, nullable = false)
     private String title;
 
@@ -68,23 +67,6 @@ public class JobOpening  implements Serializable {
 
     @OneToMany(mappedBy = "jobOpening", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JobOpeningKeyword> jobOpeningKeywordList = new ArrayList<>();
-
-    /**
-     * 자격 요건 키워드 리스트를 반환하는 메서드입니다.
-     *
-     * 이 메서드는 JobOpening에 연결된 JobOpeningKeyword 엔티티들을 순회하여,
-     * 각 JobOpeningKeyword의 Keyword 객체에서 키워드 이름을 추출해 List<String>으로 반환합니다.
-     * 자격 요건을 쉽게 조회할 수 있도록 합니다.
-     *
-     * @return 자격 요건 키워드 리스트
-     */
-    public List<String> getRequiredSkillList() {
-        List<String> skillList = new ArrayList<>();
-        for (JobOpeningKeyword jobOpeningKeyword : jobOpeningKeywordList) {
-            skillList.add(jobOpeningKeyword.getKeyword().getName());
-        }
-        return skillList;
-    }
 
     /**
      * JobOpening 엔티티를 생성하는 유틸리티 메서드입니다.

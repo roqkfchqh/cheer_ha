@@ -44,9 +44,7 @@ public class BookmarkService {
      */
     @Transactional
     public void createBookmark(Long userId, Long jobOpeningId) {
-        JobOpening jobOpening = jobOpeningFindByService.findById(jobOpeningId);
-        boolean isBookmarkExists = bookmarkRepository.existsByUserIdAndJobOpeningId(userId, jobOpeningId);
-        if (isBookmarkExists) {
+        if (bookmarkRepository.existsByUserIdAndJobOpeningId(userId, jobOpeningId)) {
             return;
         }
         long bookmarkCount = bookmarkRepository.countByUserId(userId);
@@ -55,10 +53,12 @@ public class BookmarkService {
             bookmarkRepository.delete(oldestBookmark);
         }
         User user = userFindByIdService.findById(userId);
+        JobOpening jobOpening = jobOpeningFindByService.findById(jobOpeningId);
         Bookmark bookmark = Bookmark.toEntity(user, jobOpening);
         bookmarkRepository.save(bookmark);
         // RedisBookmarkService로 캐시 업데이트
-        bookmarkCacheService.updateCacheOnBookmarkAdd(userId, bookmark);
+        ReadBookmarkResponseDto dto = ReadBookmarkResponseDto.toDto(bookmark);
+        bookmarkCacheService.updateCacheOnBookmarkAdd(userId, dto);
     }
 
     /**
@@ -107,7 +107,7 @@ public class BookmarkService {
     /**
      * 사용자가 저장한 채용 공고의 북마크를 삭제하는 메서드입니다.
      */
-    @Transactional
+    @Transactional  //TODO: 트랜잭션이 없으면 안되는 이유 찾기
     public void deleteBookmark(Long userId, Long jobOpeningId) {
         bookmarkRepository.deleteByUserIdAndJobOpeningId(userId, jobOpeningId);
         // 캐시에서 해당 북마크 삭제
@@ -133,7 +133,8 @@ public class BookmarkService {
         // DB에서 가져온 데이터를 캐시에 저장
         List<Bookmark> bookmarks = bookmarkPage.getContent();
         for (Bookmark bookmark : bookmarks) {
-            bookmarkCacheService.updateCacheOnBookmarkAdd(userId, bookmark);
+            ReadBookmarkResponseDto dto = ReadBookmarkResponseDto.toDto(bookmark);
+            bookmarkCacheService.updateCacheOnBookmarkAdd(userId, dto);
         }
         return bookmarkPage;
     }

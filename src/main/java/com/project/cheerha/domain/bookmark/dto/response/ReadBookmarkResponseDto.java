@@ -2,6 +2,8 @@ package com.project.cheerha.domain.bookmark.dto.response;
 
 import com.project.cheerha.domain.bookmark.entity.Bookmark;
 import com.project.cheerha.domain.jobopening.entity.JobOpening;
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
+
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public record ReadBookmarkResponseDto(
                 jobOpening.getHiringStartAt().toString(),      // 채용시작일
                 jobOpening.getHiringEndAt().toString(),      // 채용마감일
                 jobOpening.getPosition(),          // 포지션 (직무명)
-                jobOpening.getRequiredSkillList()     // 자격 요건 (기술 키워드 리스트)
+                new RequiredSkills(jobOpening.getJobOpeningKeywordList()).getValues()   // 자격 요건 (기술 키워드 리스트)
         );
     }
 }

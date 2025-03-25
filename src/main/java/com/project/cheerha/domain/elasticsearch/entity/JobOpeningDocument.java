@@ -3,6 +3,7 @@ package com.project.cheerha.domain.elasticsearch.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.cheerha.common.elasticsearch.IndexName;
 import com.project.cheerha.domain.jobopening.entity.JobOpening;
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -63,13 +63,13 @@ public class JobOpeningDocument {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
     @Field(type = FieldType.Date)  // Date 타입으로 저장
-    private ZonedDateTime createdAt = ZonedDateTime.now(); // 채용공고 생성일
+    private ZonedDateTime createdAt; // 채용공고 생성일
 
     @Field(type = FieldType.Integer)  // Integer 타입으로 저장
     private int viewCount; // 조회수
 
     @Field(type = FieldType.Text)  // fuzzy 지원을 위해 text로 변경
-    private List<String> requiredSkills = new ArrayList<>(); // 자격 요건 키워드 리스트
+    private List<String> requiredSkills; // 자격 요건 키워드 리스트
 
     /**
      * JobOpening 엔티티를 기반으로 JobOpeningDocument 객체를 생성하는 메서드입니다.
@@ -80,7 +80,7 @@ public class JobOpeningDocument {
      * @param jobOpening 변환할 JobOpening 엔티티 객체
      * @return 변환된 JobOpeningDocument 객체
      */
-    public static JobOpeningDocument create(JobOpening jobOpening) {
+    public static JobOpeningDocument create(JobOpening jobOpening, RequiredSkills requiredSkills) {
         return new JobOpeningDocument(
                 jobOpening.getId().toString(), // jobOpening의 id를 String으로 변환하여 사용
                 jobOpening.getTitle(),
@@ -97,7 +97,7 @@ public class JobOpeningDocument {
                 jobOpening.getHiringEndAt(),
                 jobOpening.getCreatedAt(),
                 jobOpening.getViewCount(),
-                jobOpening.getRequiredSkillList()
+                requiredSkills.getValues()
         );
     }
 }

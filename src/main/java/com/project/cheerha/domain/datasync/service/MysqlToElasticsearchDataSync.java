@@ -3,9 +3,8 @@ package com.project.cheerha.domain.datasync.service;
 import com.project.cheerha.domain.elasticsearch.entity.JobOpeningDocument;
 import com.project.cheerha.domain.elasticsearch.repository.JobOpeningDocumentRepository;
 import com.project.cheerha.domain.jobopening.entity.JobOpening;
+import com.project.cheerha.domain.jobopening.entity.RequiredSkills;
 import com.project.cheerha.domain.jobopening.repository.JobOpeningRepository;
-import com.project.cheerha.domain.keyword.entity.JobOpeningKeyword;
-import com.project.cheerha.domain.keyword.entity.Keyword;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,17 +40,11 @@ public class MysqlToElasticsearchDataSync implements DataSync {
 
             // 각 JobOpening에 대해 키워드 리스트를 추출하여 requiredSkills에 추가
             for (JobOpening jobOpening : jobOpeningList) {
-                List<String> requiredSkills = new ArrayList<>();
-                for (JobOpeningKeyword jobOpeningKeyword : jobOpening.getJobOpeningKeywordList()) {
-                    Keyword keyword = jobOpeningKeyword.getKeyword();
-                    if (keyword != null) {
-                        requiredSkills.add(keyword.getName());
-                    }
-                }
+                RequiredSkills requiredSkills = new RequiredSkills(jobOpening.getJobOpeningKeywordList());
 
                 // JobOpening을 JobOpeningDocument로 변환
-                JobOpeningDocument jobOpeningDocument = JobOpeningDocument.create(jobOpening);
-                jobOpeningDocument.getRequiredSkills().addAll(requiredSkills);
+                JobOpeningDocument jobOpeningDocument = JobOpeningDocument.create(jobOpening, requiredSkills);
+                jobOpeningDocument.getRequiredSkills().addAll(requiredSkills.getValues());
                 jobOpeningDocuments.add(jobOpeningDocument);
             }
 
