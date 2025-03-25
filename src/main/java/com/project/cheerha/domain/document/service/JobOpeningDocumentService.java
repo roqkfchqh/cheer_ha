@@ -19,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class JobOpeningDocumentService {
     /**
      * 전체 채용공고 조회
      */
-    @Transactional(readOnly = true)
     public Page<ReadJobOpeningDocumentResponseDto> readAllJobOpeningsUsingElasticsearch(Pageable pageable) {
         int pageSize = pageable.getPageSize();
         int pageNumber = pageable.getPageNumber();
@@ -48,7 +46,6 @@ public class JobOpeningDocumentService {
     /**
      * 조회수 기준 인기 채용공고 조회
      */
-    @Transactional(readOnly = true)
     public Page<ReadJobOpeningDocumentResponseDto> readTop100PopularJobOpeningsUsingElasticsearch(Pageable pageable) {
         int pageSize = Math.min(pageable.getPageSize(), IndexName.MAX_POPULAR_SIZE);
         int pageNumber = pageable.getPageNumber();
@@ -62,7 +59,6 @@ public class JobOpeningDocumentService {
     /**
      * 필터링된 채용공고 조회
      */
-    @Transactional
     public Page<ReadJobOpeningDocumentResponseDto> readJobOpeningUsingElasticSearchFilter(
             ReadJobOpeningDocumentRequestDto requestDto,
             Long userId,
@@ -83,7 +79,6 @@ public class JobOpeningDocumentService {
     /**
      * 자동 완성 기능을 통한 채용 공고 조회
      */
-    @Transactional
     public Page<ReadJobOpeningDocumentAutoResponseDto> readJobOpeningElasticAuto(
             ReadJobOpeningDocumentAutoRequestDto requestDto,
             Long userId,
