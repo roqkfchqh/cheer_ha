@@ -80,13 +80,14 @@ class BookmarkServiceTest {
 
         when(bookmarkRepository.existsByUserIdAndJobOpeningId(user.getId(), jobOpening.getId())).thenReturn(false);
         when(bookmarkRepository.countByUserId(user.getId())).thenReturn(0L);
+        when(jobOpeningFindByService.findById(jobOpening.getId())).thenReturn(jobOpening);
 
         // When: 북마크를 저장할 때
         bookmarkService.createBookmark(user.getId(), jobOpening.getId());
 
         // Then: save 메서드가 1번 호출되었는지, 캐시 업데이트가 1번 호출되었는지 확인
         verify(bookmarkRepository, times(1)).save(any(Bookmark.class));
-        verify(bookmarkCacheService, times(1)).updateCacheOnBookmarkAdd(eq(user.getId()), any(Bookmark.class));
+        verify(bookmarkCacheService, times(1)).updateCacheOnBookmarkAdd(user.getId(), ReadBookmarkResponseDto.toDto(bookmark));
     }
 
     @Test
@@ -150,7 +151,9 @@ class BookmarkServiceTest {
 
         // Mock 가장 오래된 북마크 삭제
         Bookmark oldestBookmark = mock(Bookmark.class);
+        Bookmark latestBookmark = Bookmark.toEntity(user, jobOpening);
         when(bookmarkRepository.findFirstByUserIdOrderByIdAsc(user.getId())).thenReturn(oldestBookmark);
+        when(jobOpeningFindByService.findById(jobOpening.getId())).thenReturn(jobOpening);
 
         // When: 새로운 북마크를 생성하려고 할 때
         bookmarkService.createBookmark(user.getId(), jobOpening.getId());
@@ -158,6 +161,6 @@ class BookmarkServiceTest {
         // Then: 가장 오래된 북마크가 삭제되고 새 북마크가 저장되어야 함
         verify(bookmarkRepository, times(1)).delete(oldestBookmark);
         verify(bookmarkRepository, times(1)).save(any(Bookmark.class));
-        verify(bookmarkCacheService, times(1)).updateCacheOnBookmarkAdd(eq(user.getId()), any(Bookmark.class));
+        verify(bookmarkCacheService, times(1)).updateCacheOnBookmarkAdd(user.getId(), ReadBookmarkResponseDto.toDto(latestBookmark));
     }
 }
