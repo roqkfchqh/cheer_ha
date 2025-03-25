@@ -50,7 +50,6 @@ public class JobOpeningService {
      * @param pageable   페이지 요청 정보 (페이지 번호, 페이지 크기)
      * @return 필터링된 채용 공고 목록
      */
-    @Transactional
     public Page<ReadJobOpeningResponseDto> readJobOpenings(
             ReadJobOpeningRequestDto requestDto,
             Long userId,
