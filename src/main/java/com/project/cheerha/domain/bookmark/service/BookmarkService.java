@@ -107,7 +107,7 @@ public class BookmarkService {
     /**
      * 사용자가 저장한 채용 공고의 북마크를 삭제하는 메서드입니다.
      */
-    @Transactional  //TODO: 트랜잭션이 없으면 안되는 이유 찾기
+    @Transactional
     public void deleteBookmark(Long userId, Long jobOpeningId) {
         bookmarkRepository.deleteByUserIdAndJobOpeningId(userId, jobOpeningId);
         // 캐시에서 해당 북마크 삭제

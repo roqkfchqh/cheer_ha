@@ -40,7 +40,6 @@ public class BookmarkCacheService {
         return new ArrayList<>();
     }
 
-    //TODO: 캐시에 entity 를 넣으면 LazyInitialize.. 발생하는 이유 찾기
     // 북마크 추가 후 캐시 갱신하는 메서드
     public void updateCacheOnBookmarkAdd(Long userId, ReadBookmarkResponseDto dto) {
         keyHashRepository.putValue("user:" + userId.toString() + ":bookmarks", dto.id().toString(), dto);
