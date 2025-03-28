@@ -79,6 +79,7 @@ public class UserKeywordService {
         );
     }
 
+    @Transactional(readOnly = true)
     public List<ReadUserKeywordResponseDto> readAllUserKeywords(Long userId) {
         List<UserKeyword> userKeywords = userKeywordRepository.findByUserId(userId);
 

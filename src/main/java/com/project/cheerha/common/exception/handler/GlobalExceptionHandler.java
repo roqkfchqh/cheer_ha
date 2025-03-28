@@ -29,10 +29,12 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(e.getStatus(), e.getMessage());
     }
 
+    // 잘못된 Http Method 처리
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<Map<String, Object>> handleMethodNotSupported(
-            HttpRequestMethodNotSupportedException e) {
+            HttpServletRequest request, HttpRequestMethodNotSupportedException e) {
         String errorMessage = "요청한 HTTP 메서드는 지원되지 않습니다.";
+        warnLogger(request, errorMessage);
         return buildErrorResponse(HttpStatus.METHOD_NOT_ALLOWED, errorMessage);
     }
 

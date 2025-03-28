@@ -8,6 +8,7 @@ import com.project.cheerha.domain.jobopening.repository.JobOpeningRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MysqlToElasticsearchDataSync implements DataSync {
      * 3. `JobOpeningDocument` 객체로 변환하고 Elasticsearch에 저장합니다.
      */
     @Override
+    @Transactional(readOnly = true)
     public void sync() {
         try {
             List<JobOpening> jobOpeningList = jobOpeningRepository.findAllWithJobOpeningKeywords();  // 적절한 ID 또는 쿼리 매개변수를 사용하여 조회
