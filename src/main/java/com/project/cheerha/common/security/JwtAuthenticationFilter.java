@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         List<String> whiteList = jwtSecurityProperties.secret().whiteList();
 
-        return whiteList.contains(path);
+        return !whiteList.contains(path);
     }
 
     @Override
